@@ -1,0 +1,6 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# Setup MD RAID device
+SUBSYSTEM=="block", KERNEL=="md*", ACTION=="change", TEST=="md/stripe_cache_size", ATTR{md/stripe_cache_size}="32768"
+SUBSYSTEM=="block", KERNEL=="md*", ACTION=="change", TEST=="md/sync_speed_min", ATTR{md/sync_speed_min}="50000"
+SUBSYSTEM=="block", KERNEL=="md*", ACTION=="change", TEST=="md/sync_speed_max", ATTR{md/sync_speed_max}="2000000"

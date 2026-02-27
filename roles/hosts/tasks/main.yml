@@ -1,0 +1,26 @@
+---
+- name: Set hostname
+  hostname:
+    name: "{{ hosts_hostname }}"
+  become: true
+  when:
+    - hosts_hostname is defined
+    - hosts_hostname | length > 0
+
+- name: Update /etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    backup: false
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  when:
+    - hosts_hostname is defined
+    - hosts_hostname | length > 0
+    - hosts_hostname_fqdn is defined
+    - hosts_hostname_fqdn | length > 0
+
+- name: Gathering facts
+  setup: #aka gather_facts

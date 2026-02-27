@@ -1,0 +1,7 @@
+---
+- name: Ping inventory hosts via role
+  hosts: all, !external
+  gather_facts: true
+  become: true
+  tasks:
+    - ping:

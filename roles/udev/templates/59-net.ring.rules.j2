@@ -1,0 +1,5 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# Setup net ring
+ACTION=="add|change", SUBSYSTEM=="net", KERNEL=="eth*|en*", RUN+="/sbin/ethtool -K $name gro off gso off tso off"
+ACTION=="add|change", SUBSYSTEM=="net", KERNEL=="eth*|en*", RUN+="/sbin/ethtool -G $name rx 4096 tx 4096"

@@ -1,0 +1,5 @@
+---
+# Handler for udev rules
+- name: update udev rules
+  shell: |-
+    udevadm control --reload && udevadm trigger

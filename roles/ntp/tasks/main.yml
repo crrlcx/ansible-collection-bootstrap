@@ -1,0 +1,39 @@
+---
+- name: Install fresh tzdata
+  apt:
+    name:
+      - tzdata
+      - systemd-timesyncd
+    state: present
+    install_recommends: true
+    update_cache: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    RUNLEVEL: "1"
+  become: true
+  check_mode: false
+  ignore_errors: true
+
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+    hwclock: UTC
+  become: true
+  notify:
+    - update timezone
+
+- name: Update config /etc/systemd/timesyncd.conf
+  template:
+    src: timesyncd.conf.j2
+    dest: /etc/systemd/timesyncd.conf
+    force: true
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  become: true
+  notify:
+    - restart systemd-timesyncd
+  when:
+    - ntp_servers is defined
+    - ntp_servers | length > 0

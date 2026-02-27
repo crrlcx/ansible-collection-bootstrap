@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+{{ ansible_managed | comment }}
+
+export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
+
+fastfetch | tee {{motd_issue_dir}}/{{ motd_issue_file }} {{motd_motd_dir}}/{{ motd_motd_file }}

@@ -1,0 +1,51 @@
+---
+- name: AWS NVMe EBS
+  include_tasks: disk-aws-nvme-ebs.yml
+  when:
+    - disk_discover_aws_nvme_ebs | bool
+
+- name: Install parted and disk utils
+  package:
+    name:
+      - parted
+      - scsitools
+    state: present
+  become: true
+
+- name: Install additional fs progs
+  package:
+    name: "{{ disk_additional_fs_utils }}"
+    state: present
+  become: true
+  when:
+    - disk_additional_fs_utils is defined
+
+- name: Checking for scsi devices
+  command: |
+    sg_scan
+  become: true
+  changed_when: false
+  check_mode: false
+  register: scsi_devices
+
+- name: Rescan SCSI disks
+  shell: |
+    /sbin/rescan-scsi-bus --forcerescan || /usr/bin/rescan-scsi-bus.sh --forcerescan
+  become: true
+  changed_when: false
+  when:
+    - scsi_devices.stdout != ''
+
+- name: Whole disk usage
+  include_tasks: disk-loop.yml
+  with_items:
+    - "{{ disk_additional_disks }}"
+  when:
+    - item.parts is undefined
+
+- name: Part disk usage
+  include_tasks: disk-loop-parts.yml
+  with_items:
+    - "{{ disk_additional_disks }}"
+  when:
+    - item.parts is defined

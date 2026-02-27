@@ -1,0 +1,24 @@
+---
+# handlers file for timesyncd
+
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: true
+  become: true
+  listen:
+    - restart systemd-timesyncd
+
+- name: restart systemd-timesyncd
+  systemd:
+    name: systemd-timesyncd
+    enabled: true
+    masked: false
+    state: restarted
+  become: true
+
+- name: update timezone
+  command: |
+    dpkg-reconfigure tzdata
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  become: true

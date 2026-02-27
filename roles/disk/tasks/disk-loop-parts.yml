@@ -1,0 +1,93 @@
+---
+
+- name: disk | Partition additional disks
+  parted:
+    align: optimal
+    device: "{{ item.disk }}"
+    label: "{{ item.label | d('gpt') }}"
+    name: "{{ part.name | d(omit)}}"
+    number: "{{ part_index + 1 }}"
+    part_end: "{{part.end | d(omit) }}"
+    part_start: "{{ part.start | d(omit) }}"
+    part_type: primary
+    state: present
+  become: true
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+
+# unable to resize xfs: looks like we've to reference the mountpoint instead of the device
+- name: disk | check part already converted
+  # at least xfs is executed twice if the partition has changed in the meantime
+  # then it tries to recreate the fs on the mounted fs which indeed fails...
+  shell: |
+    xfs_info {{ part.mount }} | grep -c 'ftype=1'
+  become: true
+  register: mountedxfs
+  ignore_errors: true
+  changed_when: false
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+  when:
+    - part.mount is defined
+    - part.fstype is defined
+    - part.fstype == "xfs"
+
+- name: disk | Make or resize filesystem on partitions
+  filesystem:
+    dev: "{{ part.name | d(item.disk + (part_index + 1) | string) }}"
+    fstype: "{{ part.fstype }}"
+    opts: "{{ part.fsopts | d(omit) }}"
+    force: "{{ part.force | d(omit) }}"
+    resizefs: true
+  become: true
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+  when:
+    - part.fstype is defined
+    - ( part.fstype != 'xfs' or mountedxfs is success )
+
+- name: disk | Make a filesystem Make xfs filesystem on partitions when not mounted
+  filesystem:
+    dev: "{{ part.name | d(item.disk + (part_index + 1) | string) }}"
+    fstype: "{{ part.fstype }}"
+    opts: "{{ part.fsopts | d(omit) }}"
+    force: true
+  become: true
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+  when:
+    - part.fstype is defined
+    - part.fstype == 'xfs'
+    - mountedxfs is failed
+
+- name: disk | Disable periodic fsck on ext3 or ext4 formatted parts
+  command: |
+    tune2fs -c0 -i0 {{ part.name | d(item.disk + (part_index + 1) | string) }}
+  become: true
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+  when:
+    - part.fstype is defined
+    - ( part.fstype == 'ext4' or part.fstype == 'ext3' )
+    - part.disable_periodic_fsck | d(false) | bool
+
+- name: disk | Get UUID and mount partition
+  include_tasks: disk-part-mount.yml
+  loop: "{{ item.parts | flatten(levels=1) }}"
+  loop_control:
+    loop_var: part
+    index_var: part_index
+  when:
+    - part.mount is defined
+    - part.fstype is defined
+    - part.fstype != 'swap'

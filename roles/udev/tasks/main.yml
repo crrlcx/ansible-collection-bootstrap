@@ -1,0 +1,30 @@
+---
+- name: Install cli tools
+  apt:
+    name:
+      - ethtool
+      - hdparm
+      - util-linux
+    state: present
+    install_recommends: true
+    update_cache: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    RUNLEVEL: "1"
+  become: true
+  check_mode: false
+
+- name: Create udev rules
+  template:
+    src: "{{ item }}"
+    dest: "/etc/udev/rules.d/{{ item | basename | regex_replace('.j2','') }}"
+    backup: false
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  with_fileglob:
+    - templates/*.rules.j2
+  notify:
+    - update udev rules

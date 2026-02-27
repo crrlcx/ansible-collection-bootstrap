@@ -1,0 +1,32 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+#
+# Entries in this file show the compile time defaults.
+# You can change settings by editing this file.
+# Defaults can be restored by simply deleting this file.
+#True
+# See resolved.conf(5) for details
+
+[Resolve]
+{% if dns_servers | length > 0 %}
+DNS={{ dns_servers | d(False) | join(' ') }}
+{% endif %}
+{% if dns_servers_fallback | length > 0 %}
+FallbackDNS={{ dns_servers_fallback | join(' ') }}
+{% endif %}
+{% if dns_domains | length > 0 %}
+Domains={{ dns_domains | join(' ') }}
+{% endif %}
+Cache=no-negative
+ReadEtcHosts=yes
+DNSStubListener=yes
+LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#DNSOverTLS=no

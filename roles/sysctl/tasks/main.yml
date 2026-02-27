@@ -1,0 +1,28 @@
+---
+# tasks file for sysctl
+
+- name: sysctl | facts
+  setup: #aka gather_facts
+    gather_subset:
+      - "hardware"
+    filter: "ansible_*_mb"
+  become: true
+
+- name: sysctl | delete sysctl file when 'force'
+  file:
+    name: "{{ sysctl_file }}"
+    state: absent
+  become: true
+  when:
+    - sysctl_force
+
+- name: sysctl | apply sysctl options
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    reload: "{{ sysctl_reload }}"
+    sysctl_file: "{{ sysctl_file }}"
+    sysctl_set: "{{ sysctl_set }}"
+    state: present
+  become: true
+  with_dict: "{{ sysctl_vars | combine(sysctl_vars_override) }}"

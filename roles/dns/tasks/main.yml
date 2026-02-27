@@ -1,0 +1,29 @@
+---
+- name: Install systemd-component
+  apt:
+    name:
+      - systemd-resolved
+    state: present
+    install_recommends: true
+    update_cache: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    RUNLEVEL: "1"
+  become: true
+  check_mode: false
+  ignore_errors: true
+
+- name: Change DNS server and settings at /etc/systemd/resolved.conf
+  template:
+    src: resolved.conf.j2
+    dest: /etc/systemd/resolved.conf
+    force: true
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  become: true
+  notify:
+    - restart systemd-resolved
+  when:
+    - dns_servers is defined

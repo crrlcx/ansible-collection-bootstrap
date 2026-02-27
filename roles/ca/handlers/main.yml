@@ -1,0 +1,14 @@
+---
+- name: update trusted ca debian
+  command: /usr/sbin/update-ca-certificates
+  listen:
+    - update trusted ca
+  when:
+    - ansible_os_family == "Debian"
+
+- name: update trusted ca redhat
+  command: /bin/update-ca-trust
+  listen:
+    - update trusted ca
+  when:
+    - ansible_os_family == "RedHat"

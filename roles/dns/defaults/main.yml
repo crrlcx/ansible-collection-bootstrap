@@ -1,0 +1,7 @@
+---
+bootstrap_dns: false
+
+# dns servers
+dns_servers: []
+dns_servers_fallback: []
+dns_domains: []

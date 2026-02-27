@@ -1,0 +1,12 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# Set io-queue-scheduler for non-rotating disks
+ACTION=="add|change", KERNEL=="[hsv]d[a-z]", TEST!="queue/rotational", ATTR{queue/scheduler}="{{ udev_io_queue_scheduler_ssd }}"
+ACTION=="add|change", KERNEL=="[hsv]d[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="{{ udev_io_queue_scheduler_ssd }}"
+
+# Set io-queue-scheduler for NVMe disks
+ACTION=="add|change", KERNEL=="nvme*", TEST!="queue/rotational", ATTR{queue/scheduler}="{{ udev_io_queue_scheduler_nvme }}"
+ACTION=="add|change", KERNEL=="nvme*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="{{ udev_io_queue_scheduler_nvme }}"
+
+# Set io-queue-scheduler for rotating disks or adaptec raid
+ACTION=="add|change", KERNEL=="[hsv]d[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="{{ udev_io_queue_scheduler_hdd }}"

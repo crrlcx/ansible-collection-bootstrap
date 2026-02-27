@@ -1,0 +1,42 @@
+namespace: crrlcx
+name: bootstrap
+version: 1.3.1
+readme: README.md
+authors:
+  - Carrol Cox <crrlcx@proton.me>
+description: Ansible collection cloud-init alternative.
+license:
+  - MIT
+  - Apache-2.0
+license_file: "LICENSE"
+tags:
+  - bootstrap
+  - debian
+  - linux
+  - openssh
+  - security
+  - ubuntu
+dependencies:
+  ansible.posix: ">=1.0.0"
+  community.crypto: ">=1.0.0"
+  community.general: ">=1.0.0"
+repository: https://github.com/crrlcx/ansible-collection-boostrap
+homepage: https://github.com/crrlcx/ansible-collection-boostrap
+issues: https://github.com/crrlcx/ansible-collection-boostrap
+build_ignore:
+  - .git*
+  - .gitattributes
+  - .github
+  - .gitignore
+  - .tox
+  - .yamllint
+  - codecov.yml
+  - galaxy.yml
+  - hacking
+  - molecule/*
+  - renovate.json
+  - requirements.txt
+  - test-requirements.txt
+  - tests
+  - tests/*
+  - tox.ini

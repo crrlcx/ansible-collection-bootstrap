@@ -1,0 +1,5 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# Setup block dev
+SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="[hsv]d[a-z]", ATTR{queue/rotational}=="1", RUN+="/sbin/blockdev --setra 1024 /dev/%k"
+SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="md*", RUN+="/sbin/blockdev --setra 65536 /dev/%k"

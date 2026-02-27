@@ -1,0 +1,8 @@
+---
+bootstrap_udev: false
+
+# noop, cfq, deadline
+# none, bfq, mq-deadline, kyber (with blk_mq)
+udev_io_queue_scheduler_nvme: "{% if ansible_kernel is version('5.0', '>') %}none{% else %}noop{% endif %}"
+udev_io_queue_scheduler_ssd: "{% if ansible_kernel is version('5.0', '>') %}kyber{% else %}noop{% endif %}"
+udev_io_queue_scheduler_hdd: "{% if ansible_kernel is version('5.0', '>') %}kyber{% else %}noop{% endif %}"

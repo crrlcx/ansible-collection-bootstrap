@@ -1,0 +1,22 @@
+---
+- name: install ca package
+  package:
+    name: ca-certificates
+    state: present
+
+- name: enable dynamic ca configuration on rhel6
+  command: /bin/update-ca-trust enable
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int == 6
+
+- name: Upload certificate
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ca_path[ansible_os_family][ansible_distribution_major_version|int] }}/{{ item | basename }}.crt"
+    mode: 0644
+    owner: root
+    group: root
+  with_fileglob: "{{ ca_src_fileglob }}"
+  notify:
+    - update trusted ca

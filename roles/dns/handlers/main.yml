@@ -1,0 +1,14 @@
+---
+# Handlers for services
+- name: systemd daemon-reload
+  systemd:
+    daemon_reload: true
+  listen:
+    - restart systemd-resolved
+
+- name: restart systemd-resolved
+  systemd:
+    name: systemd-resolved
+    enabled: true
+    masked: false
+    state: restarted

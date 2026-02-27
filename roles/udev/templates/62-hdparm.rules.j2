@@ -1,0 +1,4 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# Change HD Params
+SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="[hsv]d[a-z]", ATTR{queue/rotational}=="1", RUN+="/sbin/hdparm -B 254 /dev/%k"

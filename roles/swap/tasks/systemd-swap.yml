@@ -1,0 +1,60 @@
+---
+- name: swap | systemd-swap| install or update requirements
+  apt:
+    name: "{{ swap_systemd_requirements }}"
+    state: latest
+    install_recommends: true
+    force: true
+    force_apt_get: true
+    dpkg_options: "{{ dpkg_force_overwrite_configs | ternary('force-confdef,force-confnew', 'force-confdef,force-confold') }}"
+    update_cache: true
+    cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    RUNLEVEL: 1
+
+# TODO: drop when apt repo will
+- name: swap | systemd-swap | Copy deb package to /tmp
+  copy:
+    src: "{{ swap_systemd_package.deb }}"
+    dest: "/tmp/"
+    backup: false
+    owner: root
+    group: staff
+    mode: "0644"
+
+- name: swap | systemd-swap | Install deb package
+  apt:
+    # package: "{{ swap_systemd_package.name }}"
+    deb: "/tmp/{{ swap_systemd_package.deb }}"
+    state: present
+    install_recommends: true
+    force: true
+    force_apt_get: true
+    dpkg_options: "force-confdef,force-confnew"
+    # update_cache: true
+    # cache_valid_time: 3600
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    RUNLEVEL: 1
+  notify:
+    - restart systemd-swap
+
+- name: swap | systemd-swap | Custom configurations directory
+  file:
+    path: "/etc/systemd/swap.conf.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: swap | systemd-swap | Set custom configurations
+  template:
+    src: "etc/systemd/swap.conf.d/custom.conf.j2"
+    dest: "/etc/systemd/swap.conf.d/custom.conf"
+    backup: no
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart systemd-swap

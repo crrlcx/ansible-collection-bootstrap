@@ -1,0 +1,44 @@
+---
+- name: Bootstrap debian/ubuntu host
+  hosts: all, !external
+  gather_facts: true
+  become: true
+  collections:
+    - crrlcx.bootstrap
+  roles:
+    - role: crrlcx.bootstrap.hosts
+      when:
+        - bootstrap_hosts
+    - role: crrlcx.bootstrap.sysctl
+      when:
+        - bootstrap_sysctl
+    - role: crrlcx.bootstrap.ca
+      when:
+        - bootstrap_ca
+    - role: crrlcx.bootstrap.repositories
+      when:
+        - bootstrap_repositories
+    - role: crrlcx.bootstrap.dns
+      when:
+        - bootstrap_dns
+    - role: crrlcx.bootstrap.ntp
+      when:
+        - bootstrap_ntp
+    - role: crrlcx.bootstrap.udev
+      when:
+        - bootstrap_udev
+    - role: crrlcx.bootstrap.swap
+      when:
+        - bootstrap_swap
+    - role: crrlcx.bootstrap.disk
+      when:
+        - bootstrap_disk
+    - role: crrlcx.bootstrap.lvm
+      when:
+        - bootstrap_lvm
+    - role: crrlcx.bootstrap.ssh
+      when:
+        - bootstrap_ssh
+    - role: crrlcx.bootstrap.motd
+      when:
+        - bootstrap_motd
