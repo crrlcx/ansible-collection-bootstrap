@@ -4,8 +4,10 @@ Ansible role `motd` to manage MOTD and issue banners via fastfetch, refreshed ho
 
 ## Requirements
 
-- Ubuntu/Debian
 - fastfetch
+- cron or systemd-cron
+- MOTD support (Ubuntu/Debian)
+- Issue support (Ubuntu/Debian)
 
 ## Role variables
 
@@ -18,16 +20,14 @@ motd_packages: # list of packages to install
 motd_cron_script: /etc/cron.hourly/motd # path to cron.hourly script
 
 motd_issue_dir: /etc/issue.d     # directory for issue files
-motd_issue_file: "{{ motd_issue_dir }}/fastfetch.issue"
-
-motd_motd_dir: /etc/motd.d       # directory for motd files
-motd_motd_file: "{{ motd_motd_dir }}/fastfetch"
+motd_dir: /etc/motd.d            # directory for motd files
+motd_file: fastfetch             # output filename (motd_file for motd, motd_file.issue for issue)
 ```
 
 ## Dependencies
 
 - fastfetch
-- cron
+- cron or systemd-cron
 
 ## Example playbook
 

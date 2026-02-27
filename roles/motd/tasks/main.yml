@@ -1,44 +1,25 @@
 ---
 - name: Install motd packages
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: "{{ motd_packages }}"
     state: present
-    install_recommends: true
-    update_cache: true
-    cache_valid_time: 3600
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  become: true
   check_mode: false
 
 - name: Ensure issue.d directory exists
   ansible.builtin.file:
-    path: "{{ motd_issue_dir }}"
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: "u=rwx,g=rx,o=rx"
-  become: true
-
-- name: Ensure motd.d directory exists
-  ansible.builtin.file:
-    path: "{{ motd_motd_dir }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "u=rwx,g=rx,o=rx"
-  become: true
+  loop:
+    - "{{ motd_issue_dir }}"
+    - "{{ motd_dir }}"
 
 - name: Deploy motd cron.hourly script
   ansible.builtin.template:
-    src: motd.sh.j2
+    src: motd.j2
     dest: "{{ motd_cron_script }}"
     owner: root
     group: root
-    mode: "u=rwx,g=rx,o=rx"
-  become: true
-
-- name: Generate initial motd
-  ansible.builtin.command: "{{ motd_cron_script }}"
-  become: true
-  changed_when: false
+    mode: "u=rwx,g=rx,o="

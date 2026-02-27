@@ -4,6 +4,14 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.10] - 2026-02-27
+
+### Changed
+
+- Refactored `motd` role: updated README, streamlined variable definitions, fixed loop using `{{ item }}`.
+- Removed non-existent `tee` package from `motd` defaults.
+- Switched `motd` tasks to `ansible.builtin.package` module.
+
 ## [1.4.4] - 2026-02-27
 
 ### Changed
@@ -71,6 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.4.10]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.4.4...1.4.10
 [1.4.4]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.4.0...1.4.4
 [1.4.0]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.0...1.3.1

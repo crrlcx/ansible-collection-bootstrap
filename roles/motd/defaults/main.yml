@@ -9,8 +9,6 @@ motd_packages:
 motd_cron_script: /etc/cron.hourly/motd
 
 ## Paths for motd/issue output
+motd_dir: /etc/motd.d
 motd_issue_dir: /etc/issue.d
-motd_issue_file: fastfetch.issue
-
-motd_motd_dir: /etc/motd.d
-motd_motd_file: fastfetch
+motd_file: fastfetch
