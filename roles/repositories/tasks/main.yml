@@ -1,0 +1,39 @@
+---
+- name: Get apt version
+  ansible.builtin.shell:
+    cmd: apt-get --version | head -1 | awk '{print $2}'
+  register: _apt_version
+  changed_when: false
+  check_mode: false
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Set deb822 support flag
+  ansible.builtin.set_fact:
+    _apt_deb822: "{{ _apt_version.stdout is defined and _apt_version.stdout is version('1.1', '>=') }}"
+
+# Legacy apt repository management with apt_key and apt_repository
+- name: Include legacy apt repository management tasks
+  ansible.builtin.include_tasks:
+    file: debian-legacy.yml
+  loop: "{{ repositories_list }}"
+  loop_control:
+    loop_var: repository
+    label: "{{ repository.name | default(repository.url) }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - not _apt_deb822
+
+# Modern apt repository management with deb822_repository
+- name: Include modern apt repository management tasks
+  ansible.builtin.include_tasks:
+    file: debian-modern.yml
+  loop: "{{ repositories_list }}"
+  loop_control:
+    loop_var: repository
+    label: "{{ repository.name }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - _apt_deb822
+
+- name: Ensure apt cache is updated before package install
+  ansible.builtin.meta: flush_handlers

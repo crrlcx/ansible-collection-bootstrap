@@ -1,0 +1,13 @@
+---
+- name: Add repository {{ repository.name }}
+  ansible.builtin.deb822_repository:
+    name: "{{ repository.name }}"
+    types: deb
+    uris: "{{ repository.url }}"
+    suites: "{{ repository.suites | d(ansible_distribution_release | lower) }}"
+    components: "{{ repository.components | d('main') }}"
+    architectures: "{{ repository.architectures | d(ansible_architecture) }}"
+    signed_by: "{{ repository.key }}"
+    enabled: "{{ repository.enabled | d(true) }}"
+  notify:
+    - update apt cache
