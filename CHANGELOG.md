@@ -4,6 +4,18 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.4] - 2026-02-27
+
+### Changed
+
+- Refactored `swap` role: streamlined README, updated defaults, reorganized task files.
+- Updated README and removed unused environment variables in `dns`, `ntp`, `udev` task files.
+- Updated `ca` role README.
+
+### Removed
+
+- Removed `systemd-swap` support and bundled deb package from `swap` role.
+
 ## [1.4.0] - 2026-02-27
 
 ### Added
@@ -59,6 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.4.4]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.4.0...1.4.4
 [1.4.0]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.2.55...1.3.0

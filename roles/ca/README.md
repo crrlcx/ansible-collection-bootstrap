@@ -1,8 +1,8 @@
-# Описание
+# CA
 
-Устанавливает корневой сертификат tcsbank.ru на хост
+Installs a root CA certificate.
 
-### Протестировано
+## Supported Platforms
 
-- Ubuntu 16.04/18.04/20.04
-- CentOS 7
+- Ubuntu 18.04+
+- CentOS 7+
