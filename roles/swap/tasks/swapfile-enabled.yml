@@ -1,0 +1,45 @@
+---
+- name: Disable swapfile before resize
+  ansible.builtin.command: swapoff {{ swap_file_path }}
+  changed_when: true
+  when:
+    - _swap_file.stat.exists
+    - swap_file_path in (_swap_active.stdout | d(''))
+    - _swap_file.stat.size != swap_file_size | human_to_bytes
+
+- name: Remove swapfile if size changed
+  ansible.builtin.file:
+    path: "{{ swap_file_path }}"
+    state: absent
+  when:
+    - _swap_file.stat.exists
+    - _swap_file.stat.size != swap_file_size | human_to_bytes
+
+- name: Create swapfile
+  ansible.builtin.command: fallocate --length {{ swap_file_size }} {{ swap_file_path }}
+  args:
+    creates: "{{ swap_file_path }}"
+  register: _swap_created
+
+- name: Set swapfile permissions
+  ansible.builtin.file:
+    path: "{{ swap_file_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Format swapfile
+  ansible.builtin.command: mkswap {{ swap_file_path }}
+  changed_when: true
+  when:
+    - _swap_created is changed # noqa: no-handler
+  notify: activate swap
+
+- name: Add swapfile to fstab
+  ansible.posix.mount:
+    src: "{{ swap_file_path }}"
+    path: none
+    fstype: swap
+    opts: sw
+    state: present
+  notify: activate swap
