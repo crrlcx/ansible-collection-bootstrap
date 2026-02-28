@@ -4,6 +4,17 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.23] - 2026-02-28
+
+### Added
+
+- `python3-debian` package dependency in `repositories` role defaults.
+- APT version gathering for conditional task logic in `repositories` role.
+
+### Changed
+
+- Enhanced `repositories` role task flow based on APT version detection.
+
 ## [1.4.20] - 2026-02-28
 
 ### Added
@@ -98,6 +109,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.4.23]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.20...1.4.23
 [1.4.20]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.12...1.4.20
 [1.4.12]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.10...1.4.12
 [1.4.10]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.4...1.4.10

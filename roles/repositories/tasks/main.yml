@@ -1,11 +1,21 @@
 ---
-- name: Get apt version
-  ansible.builtin.shell:
-    cmd: apt-get --version | head -1 | awk '{print $2}'
-  register: _apt_version
-  changed_when: false
-  check_mode: false
+- name: Gather package facts for apt version
+  ansible.builtin.package_facts:
+    manager: apt
   when: ansible_pkg_mgr == 'apt'
+
+- name: Set apt version fact
+  ansible.builtin.set_fact:
+    _apt_version:
+      stdout: "{{ ansible_facts.packages['apt'][0].version }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - "'apt' in ansible_facts.packages"
+
+- name: Install packages required for repository management
+  ansible.builtin.package:
+    name: "{{ repositories_packages }}"
+    state: present
 
 - name: Set deb822 support flag
   ansible.builtin.set_fact:

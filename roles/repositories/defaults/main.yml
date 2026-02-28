@@ -1,4 +1,7 @@
 ---
 bootstrap_repositories: false
 
+repositories_packages:
+  - python3-debian
+
 repositories_list: []
