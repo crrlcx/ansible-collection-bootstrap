@@ -4,6 +4,13 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.12] - 2026-02-28
+
+### Changed
+
+- Refactored `repositories` role: remove legacy repositories before adding new ones in DEB822 format.
+- Standardized architecture to `amd64` in `debian-modern` task.
+
 ## [1.4.10] - 2026-02-27
 
 ### Changed
@@ -79,12 +86,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
-[1.4.10]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.4.4...1.4.10
-[1.4.4]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.4.0...1.4.4
-[1.4.0]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.1...1.4.0
-[1.3.1]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.3.0...1.3.1
-[1.3.0]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.2.55...1.3.0
-[1.2.55]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.1.8...1.2.55
-[1.1.8]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.0.7...1.1.8
-[1.0.7]: https://github.com/crrlcx/ansible-collection-boostrap/compare/1.0.0...1.0.7
-[1.0.0]: https://github.com/crrlcx/ansible-collection-boostrap/releases/tag/1.0.0
+[1.4.12]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.10...1.4.12
+[1.4.10]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.4...1.4.10
+[1.4.4]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.0...1.4.4
+[1.4.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.3.1...1.4.0
+[1.3.1]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.3.0...1.3.1
+[1.3.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.2.55...1.3.0
+[1.2.55]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.1.8...1.2.55
+[1.1.8]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.0.7...1.1.8
+[1.0.7]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.0.0...1.0.7
+[1.0.0]: https://github.com/crrlcx/ansible-collection-bootstrap/releases/tag/1.0.0

@@ -1,6 +1,6 @@
 namespace: crrlcx
 name: bootstrap
-version: 1.4.10
+version: 1.4.12
 readme: README.md
 authors:
   - Carrol Cox <crrlcx@proton.me>
@@ -20,9 +20,9 @@ dependencies:
   ansible.posix: ">=1.0.0"
   community.crypto: ">=1.0.0"
   community.general: ">=1.0.0"
-repository: https://github.com/crrlcx/ansible-collection-boostrap
-homepage: https://github.com/crrlcx/ansible-collection-boostrap
-issues: https://github.com/crrlcx/ansible-collection-boostrap
+repository: https://github.com/crrlcx/ansible-collection-bootstrap
+homepage: https://github.com/crrlcx/ansible-collection-bootstrap
+issues: https://github.com/crrlcx/ansible-collection-bootstrap
 build_ignore:
   - .git*
   - .gitattributes

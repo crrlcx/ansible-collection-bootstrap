@@ -1,4 +1,21 @@
 ---
+- name: Find legacy repository files
+  ansible.builtin.find:
+    paths:
+      - /etc/apt
+      - /etc/apt/sources.list.d
+    patterns: "sources.list,*.list,.list"
+    depth: 1
+  register: legacy_lists
+
+- name: Remove legacy repository files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ legacy_lists.files | map(attribute='path') }}"
+  loop_control:
+    label: "{{ item }}"
+
 - name: Add repository {{ repository.name }}
   ansible.builtin.deb822_repository:
     name: "{{ repository.name }}"
@@ -6,7 +23,7 @@
     uris: "{{ repository.url }}"
     suites: "{{ repository.suites | d(ansible_distribution_release | lower) }}"
     components: "{{ repository.components | d('main') }}"
-    architectures: "{{ repository.architectures | d(ansible_architecture) }}"
+    architectures: "{{ repository.architectures | d('amd64') }}"
     signed_by: "{{ repository.key }}"
     enabled: "{{ repository.enabled | d(true) }}"
   notify:
