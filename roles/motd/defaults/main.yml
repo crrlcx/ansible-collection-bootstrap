@@ -1,14 +1,9 @@
 ---
 bootstrap_motd: false
 
-## Packages to install for motd
-motd_packages:
-  - fastfetch
-
 ## Path to cron.hourly script
 motd_cron_script: /etc/cron.hourly/motd
 
 ## Paths for motd/issue output
 motd_dir: /etc/motd.d
 motd_issue_dir: /etc/issue.d
-motd_file: fastfetch

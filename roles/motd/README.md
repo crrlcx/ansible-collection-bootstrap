@@ -1,32 +1,44 @@
 # About
 
-Ansible role `motd` to manage MOTD and issue banners via fastfetch, refreshed hourly by cron.
+Ansible role `motd` to manage MOTD and issue banners refreshed hourly by cron.
+Uses fastfetch by default, neofetch on Debian Bookworm.
 
 ## Requirements
 
-- fastfetch
+- Debian-based OS
 - cron or systemd-cron
-- MOTD support (Ubuntu/Debian)
-- Issue support (Ubuntu/Debian)
 
 ## Role variables
 
 ### Defaults
 
 ```yaml
-motd_packages: # list of packages to install
-  - fastfetch
+bootstrap_motd: false              # enable/disable role in playbook
 
 motd_cron_script: /etc/cron.hourly/motd # path to cron.hourly script
+motd_dir: /etc/motd.d              # directory for motd files
+motd_issue_dir: /etc/issue.d       # directory for issue files
+```
 
-motd_issue_dir: /etc/issue.d     # directory for issue files
-motd_dir: /etc/motd.d            # directory for motd files
-motd_file: fastfetch             # output filename (motd_file for motd, motd_file.issue for issue)
+### OS-specific variables (vars/)
+
+Loaded automatically based on distribution release.
+Output filenames are derived from `motd_bin` (`<motd_dir>/<motd_bin>`, `<motd_issue_dir>/<motd_bin>.issue`).
+
+```yaml
+# vars/debian/default.yml
+motd_packages:
+  - fastfetch
+motd_bin: fastfetch
+
+# vars/debian/bookworm.yml
+motd_packages:
+  - neofetch
+motd_bin: neofetch
 ```
 
 ## Dependencies
 
-- fastfetch
 - cron or systemd-cron
 
 ## Example playbook

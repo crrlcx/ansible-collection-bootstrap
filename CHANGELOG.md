@@ -4,6 +4,18 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.20] - 2026-02-28
+
+### Added
+
+- OS-specific variables for `motd` role (`vars/debian/bookworm.yml`, `vars/debian/default.yml`).
+
+### Changed
+
+- Refactored `motd` role tasks for better OS compatibility.
+- Updated `motd` README and streamlined variable definitions.
+- Simplified `motd` template.
+
 ## [1.4.12] - 2026-02-28
 
 ### Changed
@@ -86,6 +98,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.4.20]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.12...1.4.20
 [1.4.12]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.10...1.4.12
 [1.4.10]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.4...1.4.10
 [1.4.4]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.0...1.4.4

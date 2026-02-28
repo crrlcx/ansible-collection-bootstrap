@@ -3,4 +3,4 @@
 
 export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
 
-fastfetch | tee {{ motd_issue_dir }}/{{ motd_file }}.issue {{ motd_dir }}/{{ motd_file }}
+{{ motd_bin }} | tee {{ motd_issue_dir }}/{{ motd_bin }}.issue {{ motd_dir }}/{{ motd_bin }}
