@@ -29,3 +29,6 @@
     label: "{{ item.name }}"
   notify:
     - update trusted ca
+
+- name: Ensure CA handlers are flushed
+  ansible.builtin.meta: flush_handlers

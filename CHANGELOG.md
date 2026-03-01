@@ -5,6 +5,16 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-03-01
+
+### Changed
+
+- `ca` role: added handler flush after certificate tasks for immediate trust store update.
+
+### Removed
+
+- `ca` role: removed RedHat CA update handler (Debian-only now).
+
 ## [1.6.0] - 2026-03-01
 
 ### Added
@@ -148,6 +158,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.6.1]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.5...1.6.0
 [1.5.5]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.0...1.5.5
 [1.5.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.23...1.5.0

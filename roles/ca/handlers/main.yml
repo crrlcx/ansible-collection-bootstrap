@@ -4,13 +4,3 @@
   changed_when: false
   listen:
     - update trusted ca
-  when:
-    - ansible_os_family == "Debian"
-
-- name: Update trusted CA on RedHat
-  ansible.builtin.command: update-ca-trust
-  changed_when: false
-  listen:
-    - update trusted ca
-  when:
-    - ansible_os_family == "RedHat"
