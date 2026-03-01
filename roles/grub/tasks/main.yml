@@ -1,0 +1,7 @@
+---
+- name: Configure parameters
+  ansible.builtin.include_tasks: update_line.yml
+  loop: "{{ grub_lines | dict2items }}"
+  loop_control:
+    loop_var: grub_param
+    label: "{{ grub_param.key }}"

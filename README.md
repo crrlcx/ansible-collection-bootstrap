@@ -62,6 +62,7 @@ import_playbook: crrlcx.bootstrap.bootstrap
 - [ca](roles/ca) - set custom CA certificates trusted (system wide).
 - [disk](roles/disk) - manage physical and logical volumes of block devices.
 - [dns](roles/dns) - set DNS with systemd power.
+- [grub](roles/grub) - manage GRUB bootloader configuration and kernel cmdline parameters.
 - [hosts](roles/hosts) - manage hostname and /etc/hosts.
 - [lvm](roles/lvm) - manage LVM physical and logical volumes.
 - [motd](roles/motd) - manage MOTD and issue banners via fastfetch with cron.hourly.

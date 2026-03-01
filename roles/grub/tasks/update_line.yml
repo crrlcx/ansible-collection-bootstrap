@@ -1,0 +1,13 @@
+---
+- name: "Set {{ grub_param.key }}"
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^#?{{ grub_param.key }}="
+    line: >-
+      {{ grub_param.key }}={{
+        '"' ~ (grub_param.value | join(' ')) ~ '"'
+        if grub_param.value is sequence and grub_param.value is not string and grub_param.value is not mapping
+        else grub_param.value }}
+    state: present
+  notify:
+    - update grub config
