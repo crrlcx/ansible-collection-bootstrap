@@ -3,23 +3,23 @@
   ansible.builtin.command: swapoff {{ swap_file_path }}
   changed_when: true
   when:
-    - _swap_file.stat.exists
-    - swap_file_path in (_swap_active.stdout | d(''))
-    - _swap_file.stat.size != swap_file_size | human_to_bytes
+    - swap_file_stat.stat.exists
+    - swap_file_path in (swap_active.stdout | d(''))
+    - swap_file_stat.stat.size != swap_file_size | human_to_bytes
 
 - name: Remove swapfile if size changed
   ansible.builtin.file:
     path: "{{ swap_file_path }}"
     state: absent
   when:
-    - _swap_file.stat.exists
-    - _swap_file.stat.size != swap_file_size | human_to_bytes
+    - swap_file_stat.stat.exists
+    - swap_file_stat.stat.size != swap_file_size | human_to_bytes
 
 - name: Create swapfile
   ansible.builtin.command: fallocate --length {{ swap_file_size }} {{ swap_file_path }}
   args:
     creates: "{{ swap_file_path }}"
-  register: _swap_created
+  register: swap_created
 
 - name: Set swapfile permissions
   ansible.builtin.file:
@@ -32,7 +32,7 @@
   ansible.builtin.command: mkswap {{ swap_file_path }}
   changed_when: true
   when:
-    - _swap_created is changed # noqa: no-handler
+    - swap_created is changed # noqa: no-handler
   notify: activate swap
 
 - name: Add swapfile to fstab

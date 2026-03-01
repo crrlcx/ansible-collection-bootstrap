@@ -2,4 +2,5 @@
 - name: Activate swap
   ansible.builtin.command: swapon --all
   changed_when: true
-  listen: activate swap
+  listen:
+    - activate swap

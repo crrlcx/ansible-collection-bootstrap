@@ -1,5 +1,6 @@
 ---
 - name: Update grub config
   ansible.builtin.command: update-grub2
-  changed_when: false
-  listen: update grub config
+  changed_when: true
+  listen:
+    - update grub config

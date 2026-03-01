@@ -3,8 +3,8 @@
   ansible.builtin.command: swapoff {{ swap_file_path }}
   changed_when: true
   when:
-    - _swap_file.stat.exists
-    - swap_file_path in (_swap_active.stdout | d(''))
+    - swap_file_stat.stat.exists
+    - swap_file_path in (swap_active.stdout | d(''))
 
 - name: Remove swapfile from fstab
   ansible.posix.mount:
