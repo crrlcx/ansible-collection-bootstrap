@@ -21,4 +21,5 @@
     dpkg-reconfigure tzdata
   environment:
     DEBIAN_FRONTEND: noninteractive
+  changed_when: false
   become: true

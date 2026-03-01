@@ -1,22 +1,31 @@
 ---
-- name: install ca package
-  package:
+- name: Install ca-certificates package
+  ansible.builtin.package:
     name: ca-certificates
     state: present
 
-- name: enable dynamic ca configuration on rhel6
-  command: /bin/update-ca-trust enable
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version|int == 6
-
-- name: Upload certificate
-  copy:
-    src: "{{ item }}"
-    dest: "{{ ca_path[ansible_os_family][ansible_distribution_major_version|int] }}/{{ item | basename }}.crt"
-    mode: 0644
+- name: Download CA certificate from URL
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ ca_dest }}/{{ item.name }}.crt"
     owner: root
     group: root
-  with_fileglob: "{{ ca_src_fileglob }}"
+    mode: "0644"
+  loop: "{{ ca_certificates | selectattr('url', 'defined') }}"
+  loop_control:
+    label: "{{ item.name }}"
+  notify:
+    - update trusted ca
+
+- name: Add CA certificate from content
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "{{ ca_dest }}/{{ item.name }}.crt"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ ca_certificates | selectattr('content', 'defined') }}"
+  loop_control:
+    label: "{{ item.name }}"
   notify:
     - update trusted ca

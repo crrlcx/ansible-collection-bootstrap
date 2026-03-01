@@ -1,18 +1,16 @@
 ---
 bootstrap_ca: false
 
-ca_src_fileglob:
-  - files/*.crt
-  - files/*.pem
+# CA certificates destination directory
+ca_dest: /usr/local/share/ca-certificates
 
-ca_path_debian_default: /usr/local/share/ca-certificates
-ca_path:
-  RedHat:
-    6: /usr/local/share/ca-certificates
-    7: /etc/pki/ca-trust/source/anchors
-  Debian:
-    7: "{{ ca_path_debian_default }}"
-    8: "{{ ca_path_debian_default }}"
-    16: "{{ ca_path_debian_default }}"
-    18: "{{ ca_path_debian_default }}"
-    20: "{{ ca_path_debian_default }}"
+# List of CA certificates to install
+# Each item requires 'name' and either 'url' or 'content'
+ca_certificates: []
+  # - name: my-root-ca
+  #   url: https://example.com/ca.crt
+  # - name: internal-ca
+  #   content: |
+  #     -----BEGIN CERTIFICATE-----
+  #     MIIFazCCA1OgAwIBAgIUE...
+  #     -----END CERTIFICATE-----

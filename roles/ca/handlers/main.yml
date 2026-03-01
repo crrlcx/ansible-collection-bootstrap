@@ -1,13 +1,15 @@
 ---
-- name: update trusted ca debian
-  command: /usr/sbin/update-ca-certificates
+- name: Update trusted CA on Debian
+  ansible.builtin.command: update-ca-certificates
+  changed_when: false
   listen:
     - update trusted ca
   when:
     - ansible_os_family == "Debian"
 
-- name: update trusted ca redhat
-  command: /bin/update-ca-trust
+- name: Update trusted CA on RedHat
+  ansible.builtin.command: update-ca-trust
+  changed_when: false
   listen:
     - update trusted ca
   when:

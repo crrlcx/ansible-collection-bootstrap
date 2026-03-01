@@ -3,3 +3,4 @@
 - name: update udev rules
   shell: |-
     udevadm control --reload && udevadm trigger
+  changed_when: false

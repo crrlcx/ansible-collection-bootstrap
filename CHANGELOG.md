@@ -5,6 +5,28 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-03-01
+
+### Added
+
+- `ca` role: support downloading certificates from URL via `get_url`.
+- `ca` role: support installing certificates from inline content via `copy`.
+
+### Changed
+
+- **BREAKING:** `ca` role completely reworked — old variables removed, new `ca_certificates` list replaces `ca_src_fileglob` and `ca_path` dictionary.
+- **BREAKING:** `ca` role no longer copies certificates from local fileglob (`with_fileglob`). Use `ca_certificates` with `url` or `content` instead.
+- `ca` role: simplified destination path to single `ca_dest` variable (default: `/usr/local/share/ca-certificates`).
+- `ca` role: handlers use FQCN and `changed_when: false`.
+- `grub` role: minor handler fix.
+- `ntp`, `udev` roles: added missing handler attributes.
+
+### Removed
+
+- `ca` role: removed `ca_src_fileglob`, `ca_path`, `ca_path_debian_default` variables.
+- `ca` role: removed RHEL 6 `update-ca-trust enable` task.
+- `ca` role: removed `files/ca.crt` placeholder.
+
 ## [1.5.5] - 2026-03-01
 
 ### Changed
@@ -126,6 +148,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.6.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.5...1.6.0
 [1.5.5]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.0...1.5.5
 [1.5.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.23...1.5.0
 [1.4.23]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.4.20...1.4.23
