@@ -1,0 +1,6 @@
+---
+- name: Update trusted CA on Debian
+  ansible.builtin.command: update-ca-certificates
+  changed_when: false
+  listen:
+    - update trusted ca

@@ -1,0 +1,26 @@
+---
+- name: disk | part | Get UUID
+  command: |
+    blkid -s UUID -o value {{ part.name | d(item.disk + (part_index + 1) | string) }}
+  become: true
+  changed_when: false
+  register: part_blkid
+
+- name: disk | part | Mount partition
+  mount:
+    src: "UUID={{ part_blkid.stdout }}"
+    path: "{{ part.mount }}"
+    fstype: "{{ part.fstype }}"
+    opts: "{{ part.mount_options | d(omit) }}"
+    passno: '0'
+    state: "{{ part.mount_state | d('mounted') }}"
+  become: true
+
+- name: disk | part | Ensure the permissions are set correctly after mount
+  file:
+    path: "{{ part.mount }}"
+    state: directory
+    owner: "{{ part.user | d('root') }}"
+    group: "{{ part.group | d('root') }}"
+    mode: "{{ part.mode | d('0755') }}"
+  become: true

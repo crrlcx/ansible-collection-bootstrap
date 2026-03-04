@@ -1,0 +1,8 @@
+quiet: false
+rulesdir:
+  - ./rules/
+skip_list:
+  - var-naming[no-role-prefix]
+tags: []
+use_default_rules: true
+verbosity: 1

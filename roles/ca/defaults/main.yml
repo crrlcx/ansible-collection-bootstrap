@@ -1,0 +1,16 @@
+---
+bootstrap_ca: false
+
+# CA certificates destination directory
+ca_dest: /usr/local/share/ca-certificates
+
+# List of CA certificates to install
+# Each item requires 'name' and either 'url' or 'content'
+ca_certificates: []
+  # - name: my-root-ca
+  #   url: https://example.com/ca.crt
+  # - name: internal-ca
+  #   content: |
+  #     -----BEGIN CERTIFICATE-----
+  #     MIIFazCCA1OgAwIBAgIUE...
+  #     -----END CERTIFICATE-----

@@ -1,0 +1,28 @@
+---
+bootstrap_grub: false
+
+# GRUB parameters — each key maps to a line in /etc/default/grub
+grub_lines:
+  GRUB_CMDLINE_LINUX:
+    - apparmor=1
+    - security=apparmor
+    - libata.force=noncq
+    - scsi_mod.use_blk_mq=1
+    - dm_mod.use_blk_mq=1
+    - zswap.enabled=1
+    - zswap.compressor=lz4
+    - zswap.max_pool_percent=20
+    - cpufreq.default_governor=performance
+    - ipv6.disable=1
+    - init=/bin/systemd
+  GRUB_CMDLINE_LINUX_DEFAULT:
+    - console=tty0
+    - no_timer_check
+    - nofb
+    - nomodeset
+    - gfxpayload=text
+  GRUB_DEFAULT: 0
+  GRUB_DISABLE_LINUX_UUID: "true"
+  GRUB_DISABLE_OS_PROBER: "false"
+  GRUB_DISABLE_RECOVERY: '"true"'
+  GRUB_GFXMODE: 640x480

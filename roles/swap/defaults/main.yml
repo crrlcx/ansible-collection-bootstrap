@@ -1,0 +1,6 @@
+---
+bootstrap_swap: false
+
+swap_file_enabled: false
+swap_file_path: /swapfile
+swap_file_size: 2G

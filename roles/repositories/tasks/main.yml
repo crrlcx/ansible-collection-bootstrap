@@ -1,0 +1,49 @@
+---
+- name: Gather package facts for apt version
+  ansible.builtin.package_facts:
+    manager: apt
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Set apt version fact
+  ansible.builtin.set_fact:
+    apt_version:
+      stdout: "{{ ansible_facts.packages['apt'][0].version }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - "'apt' in ansible_facts.packages"
+
+- name: Install packages required for repository management
+  ansible.builtin.package:
+    name: "{{ repositories_packages }}"
+    state: present
+
+- name: Set deb822 support flag
+  ansible.builtin.set_fact:
+    apt_deb822: "{{ apt_version.stdout is defined and apt_version.stdout is version('1.1', '>=') }}"
+
+# Legacy apt repository management with apt_key and apt_repository
+- name: Include legacy apt repository management tasks
+  ansible.builtin.include_tasks:
+    file: debian-legacy.yml
+  loop: "{{ repositories_list }}"
+  loop_control:
+    loop_var: repository
+    label: "{{ repository.name | default(repository.url) }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - not apt_deb822
+
+# Modern apt repository management with deb822_repository
+- name: Include modern apt repository management tasks
+  ansible.builtin.include_tasks:
+    file: debian-modern.yml
+  loop: "{{ repositories_list }}"
+  loop_control:
+    loop_var: repository
+    label: "{{ repository.name }}"
+  when:
+    - ansible_pkg_mgr == 'apt'
+    - apt_deb822
+
+- name: Ensure apt handlers are flushed
+  ansible.builtin.meta: flush_handlers

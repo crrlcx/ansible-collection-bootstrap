@@ -1,0 +1,85 @@
+---
+
+# unable to resize xfs: looks like we've to reference the mountpoint instead of the device
+- name: disk | check already converted
+  # at least xfs is executed twice if the partition has changed in the meantime
+  # then it tries to recreate the fs on the mounted fs which indeed fails...
+  shell: |
+    xfs_info {{ item.mount }} | grep -c 'ftype=1'
+  become: true
+  register: mountedxfs
+  ignore_errors: true
+  changed_when: false
+  when:
+    - item.mount is defined
+    - item.fstype is defined
+    - item.fstype == "xfs"
+
+- name: disk | Make or resize filesystem on disk
+  filesystem:
+    dev: "{{ item.disk }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.fsopts | d(omit) }}"
+    force: "{{ item.force | d(omit) }}"
+    resizefs: true
+  become: true
+  when:
+    - item.fstype is defined
+    - ( item.fstype != 'xfs' or mountedxfs is success )
+
+- name: disk | Make xfs filesystem on disk when not mounted
+  filesystem:
+    dev: "{{ item.disk }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.fsopts | d(omit) }}"
+    force: true
+  become: true
+  when:
+    - item.fstype is defined
+    - item.fstype == 'xfs'
+    - mountedxfs is failed
+
+- name: disk | Disable periodic fsck on ext3 or ext4
+  command: |
+    tune2fs -c0 -i0 {{ item.disk }}
+  become: true
+  when:
+    - item.fstype is defined
+    - ( item.fstype == 'ext4' or item.fstype == 'ext3' )
+    - item.disable_periodic_fsck | d(false) | bool
+
+- name: disk | Get UUID for partition
+  command: |
+    blkid -s UUID -o value {{ item.disk }}
+  become: true
+  changed_when: false
+  check_mode: false
+  register: disk_blkid
+  when:
+    - item.fstype is defined
+
+- name: disk | Mount additional disk
+  mount:
+    src: "UUID={{ disk_blkid.stdout }}"
+    path: "{{ item.mount }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.mount_options | d(omit) }}"
+    passno: '0'
+    state: "{{ item.mount_state | d('mounted') }}"
+  become: true
+  when:
+    - item.fstype is defined
+    - item.mount is defined
+    - disk_blkid.rc == 0
+    - disk_blkid.stdout | length > 0
+
+- name: disk | Ensure the permissions are set correctly after mount
+  file:
+    path: "{{ item.mount }}"
+    state: directory
+    owner: "{{ item.user | d('root') }}"
+    group: "{{ item.group | d('root') }}"
+    mode: "{{ item.mode | d('0755') }}"
+  become: true
+  when:
+    - item.mount is defined

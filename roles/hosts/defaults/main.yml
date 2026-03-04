@@ -1,0 +1,8 @@
+---
+bootstrap_hosts: false
+
+## Hostname
+hosts_hostname: "{{ inventory_hostname_short }}"
+hosts_hostname_fqdn: "{{ inventory_hostname }}"
+
+hosts_file_conditions: {}

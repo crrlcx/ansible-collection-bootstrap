@@ -1,0 +1,6 @@
+---
+## Packages to install for motd
+motd_packages:
+  - fastfetch
+
+motd_bin: fastfetch

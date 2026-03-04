@@ -1,0 +1,29 @@
+### Ansible ###
+*.retry
+environments/local
+*.vault_pass.*
+
+### Common ###
+*.gho
+*.ori
+*.orig
+*.log
+
+# Direnv files
+.direnv
+.envrc
+.env
+
+# Editor specific files and folders
+.idea
+.vscode
+
+# Temp files
+*~
+*.tmp
+*.bak
+
+# macOS
+.DS_Store
+__MACOSX/
+

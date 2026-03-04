@@ -1,0 +1,16 @@
+---
+# Add GPG key
+- name: Add GPG key
+  ansible.builtin.apt_key:
+    url: "{{ repository.key }}"
+    state: present
+  notify:
+    - update apt cache
+
+# Add repository
+- name: Add APT repository
+  ansible.builtin.apt_repository:
+    repo: "{{ repository.url }}"
+    state: present
+  notify:
+    - update apt cache

@@ -1,0 +1,22 @@
+---
+# Gather swap state
+- name: Check if swapfile exists
+  ansible.builtin.stat:
+    path: "{{ swap_file_path }}"
+  register: swap_file_stat
+
+- name: Get active swap devices
+  ansible.builtin.command: swapon --show=NAME --noheadings
+  changed_when: false
+  check_mode: false
+  register: swap_active
+
+# Create/resize swapfile
+- name: Create or resize swapfile
+  ansible.builtin.include_tasks: swapfile-enabled.yml
+  when: swap_file_enabled | bool
+
+# Remove swapfile
+- name: Disable swapfile
+  ansible.builtin.include_tasks: swapfile-disabled.yml
+  when: not swap_file_enabled | bool

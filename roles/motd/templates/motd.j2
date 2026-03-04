@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+{{ ansible_managed | comment }}
+
+export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
+
+{{ motd_bin }} | tee {{ motd_issue_dir }}/{{ motd_bin }}.issue {{ motd_dir }}/{{ motd_bin }}
