@@ -1,6 +1,8 @@
 ---
 # Handler for udev rules
-- name: update udev rules
-  shell: |-
+- name: Update udev rules
+  ansible.builtin.shell: |
     udevadm control --reload && udevadm trigger
   changed_when: false
+  listen:
+    - update udev rules

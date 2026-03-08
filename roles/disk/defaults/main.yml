@@ -1,8 +1,7 @@
 ---
 bootstrap_disk: false
 
-# Aditional disks that need to be formated and mounted.
+# Additional disks that need to be formatted and mounted.
 # See README for syntax and usage.
 disk_additional_disks: []
 disk_additional_fs_utils: []
-disk_discover_aws_nvme_ebs: false

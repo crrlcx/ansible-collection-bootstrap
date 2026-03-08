@@ -1,6 +1,6 @@
 ---
 - name: Install cli tools
-  apt:
+  ansible.builtin.apt:
     name:
       - ethtool
       - hdparm
@@ -11,19 +11,20 @@
     cache_valid_time: 3600
   environment:
     DEBIAN_FRONTEND: noninteractive
-  become: true
   check_mode: false
 
 - name: Create udev rules
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
-    dest: "/etc/udev/rules.d/{{ item | basename | regex_replace('.j2','') }}"
+    dest: "/etc/udev/rules.d/{{ item | basename | regex_replace('.j2', '') }}"
     backup: false
     owner: root
     group: root
-    mode: 0644
-  become: true
+    mode: "0644"
   with_fileglob:
     - templates/*.rules.j2
   notify:
     - update udev rules
+
+- name: Ensure udev handlers are flushed
+  ansible.builtin.meta: flush_handlers

@@ -5,6 +5,29 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.25] - 2026-03-08
+
+### Changed
+
+- **BREAKING:** Removed `become: true` from all tasks and handlers across all roles — must be set at play or role level now.
+- **BREAKING:** `disk` role: removed AWS NVMe EBS support (`disk-aws-nvme-ebs.yml` and `disk_config.py` custom module deleted).
+- **BREAKING:** `hosts` role: removed `is defined` checks for `hosts_hostname` / `hosts_hostname_fqdn` — variables must be defined (empty string is OK).
+- All roles: migrated to FQCN (`ansible.builtin.*`, `ansible.posix.*`, `community.general.*`).
+- All roles: standardized task names (removed role prefix, capitalized).
+- `disk` role: replaced `with_items` with `loop`, added `changed_when`/`check_mode` where needed.
+- `disk` role: OS-aware `scsitools`/`sg3_utils` package selection.
+- `dns`, `ntp`, `udev` roles: added `flush_handlers` meta task.
+- `dns`, `ntp` roles: fixed handler listen directives.
+- `lvm` role: migrated to `community.general.lvol`, `community.general.lvg`, `community.general.filesystem`.
+- `sysctl` role: migrated to `ansible.posix.sysctl`.
+- File mode notation standardized to octal strings (`"0644"`) across all roles.
+
+### Removed
+
+- `disk` role: removed `library/disk_config.py` custom module.
+- `disk` role: removed `tasks/disk-aws-nvme-ebs.yml`.
+- `ssh` role: removed `become: true` from handler and include.
+
 ## [1.6.1] - 2026-03-01
 
 ### Changed
@@ -158,6 +181,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Roles: `bootstrap`, `ca`, `ntp`, `ssh`, `motd`, `sysctl`.
 - Bootstrap playbook for orchestrating all roles.
 
+[1.6.25]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.6.1...1.6.25
 [1.6.1]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.5...1.6.0
 [1.5.5]: https://github.com/crrlcx/ansible-collection-bootstrap/compare/1.5.0...1.5.5

@@ -1,25 +1,26 @@
 ---
 # handlers file for timesyncd
 
-- name: systemd daemon-reload
-  systemd:
+- name: Systemd daemon-reload
+  ansible.builtin.systemd:
     daemon_reload: true
-  become: true
   listen:
     - restart systemd-timesyncd
 
-- name: restart systemd-timesyncd
-  systemd:
+- name: Restart systemd-timesyncd
+  ansible.builtin.systemd:
     name: systemd-timesyncd
     enabled: true
     masked: false
     state: restarted
-  become: true
+  listen:
+    - restart systemd-timesyncd
 
-- name: update timezone
-  command: |
+- name: Update timezone
+  ansible.builtin.command: |
     dpkg-reconfigure tzdata
   environment:
     DEBIAN_FRONTEND: noninteractive
   changed_when: false
-  become: true
+  listen:
+    - update timezone

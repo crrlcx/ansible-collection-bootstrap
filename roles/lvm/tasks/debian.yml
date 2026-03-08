@@ -1,23 +1,20 @@
 ---
 - name: debian | Updating Apt Cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
-  become: true
 
 - name: debian | installing pre-reqs
-  apt:
+  ansible.builtin.apt:
     name:
       - lvm2
       - scsitools
     state: present
-  become: true
 
 - name: debian | install xfs tools
-  apt:
+  ansible.builtin.apt:
     name: xfsprogs
     state: present
-  become: true
   loop: "{{ lvm_groups|subelements('lvnames') }}"
   when:
     - item.1 is defined
@@ -28,15 +25,13 @@
     - item.1.create|bool
 
 - name: debian | checking for scsi devices
-  command: sg_scan
-  become: true
+  ansible.builtin.command: sg_scan
   register: scsi_devices
   changed_when: false
   check_mode: false
 
 
 - name: debian | rescanning for new disks added
-  command: /sbin/rescan-scsi-bus
-  become: true
+  ansible.builtin.command: /sbin/rescan-scsi-bus
   changed_when: false
   when: scsi_devices['stdout'] | length > 0

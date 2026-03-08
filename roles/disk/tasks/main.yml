@@ -1,51 +1,40 @@
 ---
-- name: AWS NVMe EBS
-  include_tasks: disk-aws-nvme-ebs.yml
-  when:
-    - disk_discover_aws_nvme_ebs | bool
-
 - name: Install parted and disk utils
-  package:
+  ansible.builtin.package:
     name:
       - parted
-      - scsitools
+      - "{{ (ansible_os_family == 'Debian') | ternary('scsitools', 'sg3_utils') }}"
     state: present
-  become: true
 
 - name: Install additional fs progs
-  package:
+  ansible.builtin.package:
     name: "{{ disk_additional_fs_utils }}"
     state: present
-  become: true
   when:
-    - disk_additional_fs_utils is defined
+    - disk_additional_fs_utils | length > 0
 
 - name: Checking for scsi devices
-  command: |
+  ansible.builtin.command: |
     sg_scan
-  become: true
   changed_when: false
   check_mode: false
   register: scsi_devices
 
 - name: Rescan SCSI disks
-  shell: |
+  ansible.builtin.shell: |
     /sbin/rescan-scsi-bus --forcerescan || /usr/bin/rescan-scsi-bus.sh --forcerescan
-  become: true
   changed_when: false
   when:
     - scsi_devices.stdout != ''
 
 - name: Whole disk usage
-  include_tasks: disk-loop.yml
-  with_items:
-    - "{{ disk_additional_disks }}"
+  ansible.builtin.include_tasks: disk-loop.yml
+  loop: "{{ disk_additional_disks }}"
   when:
     - item.parts is undefined
 
 - name: Part disk usage
-  include_tasks: disk-loop-parts.yml
-  with_items:
-    - "{{ disk_additional_disks }}"
+  ansible.builtin.include_tasks: disk-loop-parts.yml
+  loop: "{{ disk_additional_disks }}"
   when:
     - item.parts is defined
