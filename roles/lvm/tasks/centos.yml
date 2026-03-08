@@ -1,18 +1,16 @@
 ---
 - name: centos | installing lvm2
-  package:
+  ansible.builtin.package:
     name: lvm2
     state: present
-  become: true
 
 - name: centos | installing sg3_utils
-  package:
+  ansible.builtin.package:
     name: sg3_utils
     state: present
-  become: true
 
 - name: centos | debug lvg
-  debug:
+  ansible.builtin.debug:
     var: lv
     verbosity: 3
   loop: "{{ lookup('subelements', lvm_groups, 'lvnames', {'skip_missing': True}, wantlist=True) }}"
@@ -20,10 +18,9 @@
     loop_var: lv
 
 - name: centos | install xfs tools
-  package:
+  ansible.builtin.package:
     name: "xfsprogs"
     state: "present"
-  become: true
   loop: "{{ lookup('subelements', lvm_groups, 'lvnames', {'skip_missing': True}, wantlist=True) }}"
   loop_control:
     loop_var: lv
@@ -36,12 +33,10 @@
     - lv.1.create|bool
 
 - name: centos | checking for scsi devices
-  command: sg_scan
-  become: true
+  ansible.builtin.command: sg_scan
   register: scsi_devices
   changed_when: false
 
 - name: centos | rescanning for new disks
-  command: /usr/bin/rescan-scsi-bus.sh
-  become: true
+  ansible.builtin.command: /usr/bin/rescan-scsi-bus.sh
   changed_when: false

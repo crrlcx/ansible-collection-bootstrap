@@ -3,5 +3,4 @@
   ansible.builtin.include_tasks: hardening.yml
   args:
     apply:
-      become: true
   when: ssh_hardening_enabled | bool

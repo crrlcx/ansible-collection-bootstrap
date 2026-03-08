@@ -1,14 +1,16 @@
 ---
 # Handlers for services
-- name: systemd daemon-reload
-  systemd:
+- name: Systemd daemon-reload
+  ansible.builtin.systemd:
     daemon_reload: true
   listen:
     - restart systemd-resolved
 
-- name: restart systemd-resolved
-  systemd:
+- name: Restart systemd-resolved
+  ansible.builtin.systemd:
     name: systemd-resolved
     enabled: true
     masked: false
     state: restarted
+  listen:
+    - restart systemd-resolved

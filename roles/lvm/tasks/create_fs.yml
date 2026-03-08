@@ -1,11 +1,10 @@
 ---
 - name: create_fs | unmounting filesystem(s)
-  mount:
+  ansible.posix.mount:
     src: "/dev/{{ vg.vgname }}/{{ lv.lvname }}"
     path: "{{ lv.mntp }}"
     fstype: "{{ lv.filesystem | default(omit) }}"
     state: absent
-  become: true
   loop: "{{ vg.lvnames }}"
   loop_control:
     loop_var: lv
@@ -20,9 +19,8 @@
 - name: create_fs | check already converted
   # at least xfs is executed twice if the partition has changed in the meantime
   # then it tries to recreate the fs on the mounted fs which indeed fails...
-  shell: |
+  ansible.builtin.shell: |
     xfs_info {{ lv.mntp }} | grep -c 'ftype=1'
-  become: true
   register: mountedxfs
   ignore_errors: true
   changed_when: false
@@ -38,7 +36,7 @@
     - lv.create|bool
 
 - name: create_fs | creating new filesystem on new LVM logical volume(s)
-  filesystem:
+  community.general.filesystem:
     dev: "/dev/{{ vg.vgname }}/{{ lv.lvname }}"
     fstype: "{{ lv.filesystem }}"
     opts: "{{ lv.fsopts | d(omit) }}"
@@ -47,7 +45,6 @@
   loop: "{{ vg.lvnames }}"
   loop_control:
     loop_var: lv
-  become: true
   when:
     - vg.create is defined
     - vg.create|bool
@@ -60,7 +57,7 @@
     - ( lv.filesystem != 'xfs' or mountedxfs is success )
 
 - name: create_fs | creating new xfs filesystem on new LVM logical volume(s)
-  filesystem:
+  community.general.filesystem:
     fstype: "{{ lv.filesystem }}"
     dev: "/dev/{{ vg.vgname }}/{{ lv.lvname }}"
     opts: "{{ lv.fsopts | d(omit) }}"
@@ -68,7 +65,6 @@
   loop: "{{ vg.lvnames }}"
   loop_control:
     loop_var: lv
-  become: true
   when:
     - vg.create is defined
     - vg.create|bool
@@ -81,14 +77,13 @@
     - mountedxfs is failed
 
 - name: create_fs | mounting new filesystem(s)
-  mount:
+  ansible.posix.mount:
     src: "/dev/{{ vg.vgname }}/{{ lv.lvname }}"
     path: "{{ lv.mntp }}"
     fstype: "{{ lv.filesystem }}"
     opts: "{{ lv.mopts | default('defaults') }}"
     passno: "0"
     state: mounted
-  become: true
   loop: "{{ vg.lvnames }}"
   loop_control:
     loop_var: lv
@@ -102,13 +97,12 @@
     - lv.mount|bool
 
 - name: create_fs | ensure the permissions are set correctly after mount
-  file:
+  ansible.builtin.file:
     path: "{{ lv.mntp }}"
     state: directory
     owner: "{{ lv.user | d('root') }}"
     group: "{{ lv.group | d('root') }}"
     mode: "{{ lv.mode | d('0755') }}"
-  become: true
   loop: "{{ vg.lvnames }}"
   loop_control:
     loop_var: lv
