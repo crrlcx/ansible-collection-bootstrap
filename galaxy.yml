@@ -1,6 +1,6 @@
 namespace: crrlcx
 name: bootstrap
-version: 1.6.25
+version: 1.6.26
 readme: README.md
 authors:
   - Carrol Cox <crrlcx@proton.me>
@@ -8,7 +8,7 @@ description: Ansible collection cloud-init alternative.
 license:
   - MIT
   - Apache-2.0
-license_file: "LICENSE"
+license_file: LICENSE
 tags:
   - bootstrap
   - debian
