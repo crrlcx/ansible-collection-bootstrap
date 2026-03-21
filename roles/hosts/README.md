@@ -17,14 +17,14 @@ Also set the timezone for system
 hosts_hostname: "{{ inventory_hostname_short }}"
 hosts_hostname_fqdn: "{{ inventory_hostname }}"
 
-hosts_file_conditions: {}
+hosts_file: {}
 ```
 
 ### Example configuration
 
 ```yaml
 ---
-hosts_file_conditions:
+hosts_file:
   cloudflare.dns: 1.1.1.1
 ```
 

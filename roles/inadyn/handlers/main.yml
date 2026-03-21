@@ -1,0 +1,8 @@
+---
+- name: Restart inadyn
+  ansible.builtin.service:
+    name: inadyn
+    enabled: true
+    state: restarted
+  listen:
+    - restart inadyn

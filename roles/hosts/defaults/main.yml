@@ -5,4 +5,4 @@ bootstrap_hosts: false
 hosts_hostname: "{{ inventory_hostname_short }}"
 hosts_hostname_fqdn: "{{ inventory_hostname }}"
 
-hosts_file_conditions: {}
+hosts_file: {}

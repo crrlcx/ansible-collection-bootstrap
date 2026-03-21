@@ -1,0 +1,45 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+{{ ansible_managed | comment }}
+# In-A-Dyn v2.0 configuration file format
+period            = {{ inadyn_period }}
+user-agent        = {{ inadyn_user_agent }}
+allow-ipv6        = {{ inadyn_allow_ipv6 }}
+
+{% for provider in inadyn_providers %}
+provider {{ provider.name }}{% if provider.index is defined and provider.index %}:{{ provider.index }}{% endif %} {
+  username        = {{ provider.username }}
+  password        = {{ provider.password }}
+  hostname        = {{ provider.hostname }}
+  {% if provider.checkip_server is defined and provider.checkip_server %}
+  checkip-server  = {{ provider.checkip_server }}
+  {% endif %}
+  {% if provider.checkip_ssl is defined and provider.checkip_ssl %}
+  checkip-ssl     = {{ provider.checkip_ssl }}
+  {% endif %}
+  {% if provider.checkip_path is defined and provider.checkip_path %}
+  checkip-path    = {{ provider.checkip_path }}
+  {% endif %}
+  {% if provider.checkip_command is defined and provider.checkip_command %}
+  checkip-command = {{ provider.checkip_command }}
+  {% endif %}
+  {% if provider.ssl is defined and provider.ssl %}
+  ssl             = {{ provider.ssl }}
+  {% endif %}
+  {% if provider.user_agent is defined and provider.user_agent %}
+  user-agent      = {{ provider.user_agent }}
+  {% endif %}
+  {% if provider.ttl is defined and provider.ttl %}
+  ttl             = {{ provider.ttl }}
+  {% endif %}
+  {% if provider.proxied is defined and provider.proxied %}
+  proxied         = {{ provider.proxied }}
+  {% endif %}
+  {% if provider.ddns_server is defined and provider.ddns_server %}
+  ddns-server     = {{ provider.ddns_server }}
+  {% endif %}
+  {% if provider.ddns_path is defined and provider.ddns_path %}
+  ddns-path       = {{ provider.ddns_path }}
+  {% endif %}
+
+}
+{% endfor %}

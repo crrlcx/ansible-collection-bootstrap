@@ -4,4 +4,5 @@
   gather_facts: true
   become: true
   tasks:
-    - ping:
+    - name: Ping hosts
+      ansible.builtin.ping:

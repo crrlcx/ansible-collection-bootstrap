@@ -5,6 +5,21 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-03-20
+
+### Added
+
+- `inadyn` role for dynamic DNS client configuration.
+- All roles: add `inadyn` role to the `playbook/bootstrap.yml` with feature flag.
+
+### Changed
+
+- **BREAKING:** `hosts` role: replaced `hosts_file_conditions` variable with `hosts_file` for direct file path specification.
+
+### Fixed
+
+- All roles: fixed FQCN issue at the `playbook/ping.yml` to `ansible.builtin.ping` for connectivity testing.
+
 ## [1.6.25] - 2026-03-08
 
 ### Changed

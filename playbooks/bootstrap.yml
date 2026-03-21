@@ -45,3 +45,6 @@
     - role: crrlcx.bootstrap.motd
       when:
         - bootstrap_motd
+    - role: crrlcx.bootstrap.inadyn
+      when:
+        - bootstrap_inadyn

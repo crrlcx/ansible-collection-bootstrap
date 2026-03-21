@@ -14,8 +14,8 @@ ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
 
 # Additionals
-{% if hosts_file_conditions | d(False) %}
-  {% for dn, ip in hosts_file_conditions.items() %}
+{% if hosts_file | length > 0 %}
+  {% for dn, ip in hosts_file.items() %}
 {{ ip }} {{ dn }}
   {% endfor %}
 {% endif %}
