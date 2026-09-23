@@ -5,6 +5,18 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.12] - 2026-09-24
+
+### Changed
+
+- `inadyn` role: updated configuration handling and template rendering for provider type and DDNS response support.
+
+## [1.8.11] - 2026-09-23
+
+### Changed
+
+- `inadyn` role: updated configuration template to include provider type and DDNS response handling.
+
 ## [1.8.10] - 2026-06-02
 
 ### Changed

@@ -1,15 +1,21 @@
 #jinja2: lstrip_blocks: True, trim_blocks: True
 {{ ansible_managed | comment }}
 # In-A-Dyn v2.0 configuration file format
-period            = {{ inadyn_period }}
-user-agent        = {{ inadyn_user_agent }}
-allow-ipv6        = {{ inadyn_allow_ipv6 }}
+period        = {{ inadyn_period }}
+forced-update = {{ inadyn_forced_update }}
+secure-ssl    = {{ inadyn_secure_ssl }}
+user-agent    = {{ inadyn_user_agent }}
+allow-ipv6    = {{ inadyn_allow_ipv6 }}
 
 {% for provider in inadyn_providers %}
-provider {{ provider.name }}{% if provider.index is defined and provider.index %}:{{ provider.index }}{% endif %} {
+{{ provider.type | d('provider') }} {{ provider.name }}{% if provider.index is defined and provider.index %}:{{ provider.index }}{% endif %} {
+  {% if provider.username is defined and provider.username %}
   username        = {{ provider.username }}
+  {% endif %}
   password        = {{ provider.password }}
+  {% if provider.hostname is defined and provider.hostname %}
   hostname        = {{ provider.hostname }}
+  {% endif %}
   {% if provider.checkip_server is defined and provider.checkip_server %}
   checkip-server  = {{ provider.checkip_server }}
   {% endif %}
@@ -17,16 +23,16 @@ provider {{ provider.name }}{% if provider.index is defined and provider.index %
   checkip-ssl     = {{ provider.checkip_ssl }}
   {% endif %}
   {% if provider.checkip_path is defined and provider.checkip_path %}
-  checkip-path    = {{ provider.checkip_path }}
+  checkip-path    = "{{ provider.checkip_path }}"
   {% endif %}
   {% if provider.checkip_command is defined and provider.checkip_command %}
-  checkip-command = {{ provider.checkip_command }}
+  checkip-command = "{{ provider.checkip_command }}"
   {% endif %}
   {% if provider.ssl is defined and provider.ssl %}
   ssl             = {{ provider.ssl }}
   {% endif %}
   {% if provider.user_agent is defined and provider.user_agent %}
-  user-agent      = {{ provider.user_agent }}
+  user-agent      = "{{ provider.user_agent }}"
   {% endif %}
   {% if provider.ttl is defined and provider.ttl %}
   ttl             = {{ provider.ttl }}
@@ -38,7 +44,10 @@ provider {{ provider.name }}{% if provider.index is defined and provider.index %
   ddns-server     = {{ provider.ddns_server }}
   {% endif %}
   {% if provider.ddns_path is defined and provider.ddns_path %}
-  ddns-path       = {{ provider.ddns_path }}
+  ddns-path       = "{{ provider.ddns_path }}"
+  {% endif %}
+  {% if provider.ddns_response is defined and provider.ddns_response %}
+  ddns-response   = "{{ provider.ddns_response }}"
   {% endif %}
 }
 {% endfor %}
