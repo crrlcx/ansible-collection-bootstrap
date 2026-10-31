@@ -1,0 +1,10 @@
+---
+- name: Reboot
+  hosts: all, !external
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Reboot a machine that might have lots of updates to apply
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
+        boot_time_command: uptime

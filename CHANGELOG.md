@@ -5,6 +5,12 @@ All notable changes to the `crrlcx.bootstrap` Ansible collection will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.13] - 2026-10-31
+
+### Added
+
+- Playbooks for APT package management and system reboot tasks.
+
 ## [1.8.12] - 2026-09-24
 
 ### Changed

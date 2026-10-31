@@ -1,0 +1,20 @@
+---
+- name: Upgrade apt packages
+  hosts: all, !external
+  gather_facts: false
+  become: true
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  tasks:
+    - name: Pass options to dpkg on run
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true
+        dpkg_options: "force-confold,force-confdef"
+    - name: Remove dependencies that are no longer required and purge their configuration files
+      ansible.builtin.apt:
+        autoremove: true
+        purge: true
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      ansible.builtin.apt:
+        clean: true
