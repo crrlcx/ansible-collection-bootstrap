@@ -1,6 +1,7 @@
 ---
 - name: Reboot
   hosts: all, !external
+  strategy: host_pinned
   gather_facts: false
   become: true
   tasks:
